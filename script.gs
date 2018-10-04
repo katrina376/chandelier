@@ -27,14 +27,11 @@ function getStuinfo_(queryString) {
     var lookup = stureq.getChildText('STUID');
     var vers = stureq.getChildText('Vers');
     
-    var status = XmlService.createElement('WEBOK');
-    var error = XmlService.createElement('ERROR');
-    
     if ((uid != ACA_API_USER) || (password != ACA_API_PASSWORD)) {
-      status = false;
+      ok = false;
       errorString = '未授權';
     } else if (vers != VERS) {
-      status = false;
+      ok = false;
       errorString = '輸入資料錯誤';
     } else {
       /* Create result */
@@ -50,24 +47,23 @@ function getStuinfo_(queryString) {
         ok = true;
         result = values[idx];
       } else {
-        status = false;
+        ok = false;
         errorString = '查無學號資料';
       }
     }
   } catch(err) {
     ok = false;
-    Logger.log(err)
     errorString = '輸入資料錯誤';
   }
   
   if (ok) {
     var status = XmlService.createElement('WEBOK').setText('OK');
     
-    var stuid = XmlService.createElement('STUID').setText(values[idx][0]);
-    var stutype = XmlService.createElement('STUTYPE').setText(values[idx][1]);
-    var incampus = XmlService.createElement('INCAMPUS').setText(values[idx][2]);
-    var college = XmlService.createElement('COLLEGE').setText(values[idx][3]);
-    var dptcode = XmlService.createElement('DPTCODE').setText(values[idx][4]);
+    var stuid = XmlService.createElement('STUID').setText(result[0]);
+    var stutype = XmlService.createElement('STUTYPE').setText(result[1]);
+    var incampus = XmlService.createElement('INCAMPUS').setText(result[2]);
+    var college = XmlService.createElement('COLLEGE').setText(result[3]);
+    var dptcode = XmlService.createElement('DPTCODE').setText(result[4]);
     
     stuinfo
       .addContent(status)
